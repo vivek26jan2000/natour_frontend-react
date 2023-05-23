@@ -4,37 +4,55 @@ import { getUserAction } from "../utils/actions";
 import { useParams } from "react-router-dom";
 import AuthContext from "../store/authContext";
 import { Link } from "react-router-dom";
+import UpdatePassword from "../components/UpdatePassword";
 
 const UserAccount = (props) => {
-  const [user, setUser] = useState();
+  // const [user, setUser] = useState();
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const { userId } = useParams();
 
   const authCtx = useContext(AuthContext);
+  const user = authCtx.user;
 
   // get the user from userId
   useEffect(() => {
     const getUser = async () => {
-      setIsPageLoaded(true);
-      const { data } = await getUserAction(userId);
-      console.log(data);
-      setUser(data.user);
-      // authCtx.updateStoreUser(data.user);
-      setIsPageLoaded(false);
+      try {
+        setIsPageLoaded(true);
+        const { data } = await getUserAction(userId);
+        console.log(data);
+
+        authCtx.updateStoreUser(data.user);
+
+        localStorage.setItem("user", JSON.stringify(data.user));
+        setIsPageLoaded(false);
+      } catch (err) {
+        console.log(err);
+        console.log(err.response.data.message);
+      }
     };
     getUser();
-  }, []);
+  }, [userId]);
+
+  // const handelUserUpdate = async (updateUserData) => {
+  //   setUser(updateUserData);
+  //   console.log("updated user in userAccount", user);
+  // };
+
+  // useEffect(() => {
+  //   console.log("this is new user", user);
+  // }, [user]);
 
   return (
     <Fragment>
-      {!isPageLoaded && user && (
+      {!isPageLoaded && authCtx.user && authCtx.isAuthorize && (
         <main className="main">
           <div className="user-view">
             <nav className="user-view__menu">
               {user.role === "user" && (
                 <ul className="side-nav">
                   <li className="side-nav--active">
-                    <Link to={`user/${userId}`}>Settings</Link>
+                    <Link to="">Settings</Link>
                   </li>
                   <li>
                     <a href="/">My bookings</a>
@@ -68,55 +86,7 @@ const UserAccount = (props) => {
             <div className="user-view__content">
               <UpdateUser user={user} />
               <div className="line">&nbsp;</div>
-              <div className="user-view__form-container">
-                <h2 className="heading-secondary ma-bt-md">Password change</h2>
-                <form className="form form-user-settings">
-                  <div className="form__group">
-                    <label className="form__label" htmlFor="password-current">
-                      Current password
-                    </label>
-                    <input
-                      className="form__input"
-                      id="password-current"
-                      type="password"
-                      placeholder="••••••••"
-                      required="required"
-                      minLength="8"
-                    />
-                  </div>
-                  <div className="form__group">
-                    <label className="form__label" htmlFor="password">
-                      New password
-                    </label>
-                    <input
-                      className="form__input"
-                      id="password"
-                      type="password"
-                      placeholder="••••••••"
-                      required="required"
-                      minLength="8"
-                    />
-                  </div>
-                  <div className="form__group ma-bt-lg">
-                    <label className="form__label" htmlFor="password-confirm">
-                      Confirm password
-                    </label>
-                    <input
-                      className="form__input"
-                      id="password-confirm"
-                      type="password"
-                      placeholder="••••••••"
-                      required="required"
-                      minLength="8"
-                    />
-                  </div>
-                  <div className="form__group right">
-                    <button className="btn btn--small btn--green">
-                      Save password
-                    </button>
-                  </div>
-                </form>
-              </div>
+              <UpdatePassword />
             </div>
           </div>
         </main>
@@ -125,6 +95,13 @@ const UserAccount = (props) => {
         <main className="main">
           <div className="loading">
             <h1>Loading...</h1>
+          </div>
+        </main>
+      )}
+      {!authCtx.isAuthorize && (
+        <main className="main">
+          <div className="loading">
+            <h1>You are not Login.Please login to access this page</h1>
           </div>
         </main>
       )}

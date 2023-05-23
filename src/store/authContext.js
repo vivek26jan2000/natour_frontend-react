@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getAllTourAction, getUserAction } from "../utils/actions";
+import { getAllTourAction } from "../utils/actions";
 
 const AuthContext = createContext({
   tours: [],
@@ -26,17 +26,21 @@ export const AuthContextProvider = (props) => {
     getAllToursRequest();
   }, []);
 
-  // getting token and login user from  localStorage
+  // getting token from  localStorage
   useEffect(() => {
     const storeToken = localStorage.getItem("token");
-    const storeUser = JSON.parse(localStorage.getItem("user"));
-
+    const storeUser = localStorage.getItem("user");
     if (storeToken) {
       setIsLogin(true);
       setToken(storeToken);
+    } else {
+      setIsLogin(false);
     }
     if (storeUser) {
-      setUser(storeUser);
+      setUser(JSON.parse(storeUser));
+    }
+    if (!storeUser) {
+      setIsLogin(false);
     }
   }, [isLogin]);
 
@@ -53,22 +57,11 @@ export const AuthContextProvider = (props) => {
     setIsLogin(false);
   };
 
-  // updating the user store in localstroage
+  // updating the user
   const updateUserHadler = async (userData) => {
-    setUser((prevUser) => {
-      return {
-        ...prevUser,
-        ...userData,
-      };
-    });
+    setUser(userData);
+    console.log(user);
   };
-
-  // get the current user
-  useEffect(() => {
-    const sendReq = async () => {
-      const data = await getUserAction();
-    };
-  });
 
   const ctxObj = {
     tours: tours,

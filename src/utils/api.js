@@ -1,5 +1,5 @@
-export const API_URL = "http://localhost:3000/api/v1/"; //Base Url
-
+export const API_URL = "https://vivek-natour-backend.onrender.com/api/v1/"; //Base Url
+// export const API_URL = "http://localhost:3000/api/v1/";
 export const loginUrl = () => {
   return API_URL + "users/login";
 };
@@ -26,4 +26,11 @@ export const updateUserUrl = () => {
 
 export const getUserUrl = (id) => {
   return API_URL + `users/currentUser/${id}`;
+};
+
+export const updateUserPasswordUrl = () => {
+  return API_URL + "users/updateMyPassword";
+};
+export const getUserImgUrl = (imageId) => {
+  return API_URL + `users/images/${imageId}`;
 };

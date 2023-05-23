@@ -5,31 +5,26 @@ import logoImg from "../img/logo-white.png";
 import { Link } from "react-router-dom";
 import { Fragment, useContext, useEffect, useState } from "react";
 import AuthContext from "../store/authContext";
-import { getUserAction } from "../utils/actions";
+import { getUserAction, getUserImgAction } from "../utils/actions";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = (props) => {
-  const [user, setUser] = useState(null);
+  const [userImg, setUserImg] = useState();
 
+  const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
+  const user = authCtx.user;
 
-  // useEffect(() => {
-  //   setUser(authCtx.user);
-  //   console.log(user);
-  // }, [authCtx.user]);
-  // get the user from userId
   useEffect(() => {
-    const getUser = async () => {
-      const storeUser = JSON.parse(localStorage.getItem("user"));
-      const token = localStorage.getItem("token");
-      if (storeUser && token) {
-        const { data } = await getUserAction(storeUser._id);
-        console.log(data);
-        setUser(data.user);
+    const getImg = async () => {
+      if (user) {
+        const imageUrl = await getUserImgAction(user.photo);
+
+        setUserImg(imageUrl);
       }
-      // authCtx.updateStoreUser(data.user);
     };
-    getUser();
-  }, [authCtx.isAuthorize]);
+    getImg();
+  }, [user]);
 
   return (
     <Fragment>
@@ -57,13 +52,17 @@ const Navbar = (props) => {
                 My bookings
               </a>
               <Link to={`user/${user._id}`} className="nav__el">
-                <img
-                  src={require(`../img/users/${user.photo}`)}
-                  className="nav__user-img"
-                  alt="User"
-                />
+                <img src={userImg} className="nav__user-img" alt="User" />
                 <span>{user ? user.name.split(" ")[0] : ""}</span>
               </Link>
+              <button
+                className="nav__el"
+                onClick={() => {
+                  authCtx.logout();
+                  navigate("/");
+                }}>
+                LogOut
+              </button>
             </>
           )}
 

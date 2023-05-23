@@ -5,6 +5,8 @@ import {
   getTourUrl,
   updateUserUrl,
   getUserUrl,
+  updateUserPasswordUrl,
+  getUserImgUrl,
 } from "./api";
 import axios from "axios";
 
@@ -58,6 +60,7 @@ export const updateUserAction = async (token, userData) => {
     {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     }
   );
@@ -67,4 +70,40 @@ export const updateUserAction = async (token, userData) => {
 export const getUserAction = async (id) => {
   const { data } = await axios.get(getUserUrl(id));
   return data;
+};
+
+export const updateUserPassword = async (token, value) => {
+  const { data } = await axios.patch(
+    updateUserPasswordUrl(),
+    {
+      password: value.newPassword,
+      passwordCurrent: value.currentPassword,
+      passwordConfirm: value.confirmPassword,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return data;
+};
+
+export const getUserImgAction = async (imageId) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(getUserImgUrl(imageId), {
+      responseType: "arraybuffer",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const imageBlob = new Blob([response.data], {
+      type: response.headers["content-type"],
+    });
+    const imageUrl = URL.createObjectURL(imageBlob);
+    return imageUrl;
+  } catch (err) {
+    console.log(err);
+  }
 };
