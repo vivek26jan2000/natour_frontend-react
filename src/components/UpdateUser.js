@@ -62,7 +62,7 @@ const UpdateUser = (props) => {
     if (photo) {
       userData.photo = formData.get("photo");
     }
-    console.log(userData);
+
     const sendReq = async () => {
       const token = localStorage.getItem("token");
       try {
@@ -73,7 +73,6 @@ const UpdateUser = (props) => {
           // saving the user to data base
           localStorage.setItem("user", JSON.stringify(data.data.user));
 
-          console.log(data.data.user);
           // show success alert
           setShowAlert(true);
           setShowError(false);
@@ -135,7 +134,11 @@ const UpdateUser = (props) => {
           </div>
           <div className="form__group form__photo-upload">
             {!previewImage && (
-              <img className="form__user-photo" src={userImg} alt="User " />
+              <img
+                className="form__user-photo"
+                src={userImg ? userImg : defaultUserImg}
+                alt="User "
+              />
             )}
             {previewImage && (
               <img

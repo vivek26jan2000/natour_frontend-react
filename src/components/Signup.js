@@ -13,6 +13,7 @@ const Signup = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
@@ -41,8 +42,9 @@ const Signup = (props) => {
       passwordConfirm: inputPasswordConfirm,
     };
     try {
+      setLoading(true);
       const { data } = await signupAction(value);
-      console.log(data);
+
       localStorage.setItem("user", JSON.stringify(data.user));
       // clean the input feilds
       setInputEmail("");
@@ -57,6 +59,7 @@ const Signup = (props) => {
       // LOGIN IN THE USER
       authCtx.login();
 
+      setLoading(false);
       // navigate to home page
       setTimeout(() => {
         navigate("/");
@@ -66,6 +69,7 @@ const Signup = (props) => {
       setErrorMsg(err.response.data.message);
       setShowAlert(true);
       setShowError(true);
+      setLoading(false);
     }
   };
 
@@ -138,7 +142,7 @@ const Signup = (props) => {
                 type="primary"
                 htmltype="submit"
                 className="btn btn--green">
-                Signup
+                {loading ? "Signin..." : "Signup"}
               </button>
             </div>
           </form>

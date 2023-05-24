@@ -7,6 +7,8 @@ const Login = () => {
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const [showAlert, setShowAlert] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -26,9 +28,8 @@ const Login = () => {
     const email = inputEmail;
     const password = inputPassword;
     try {
+      setLoading(true);
       const data = await loginAction(email, password);
-
-      console.log(data);
 
       // show success alert
       setShowAlert(true);
@@ -36,6 +37,8 @@ const Login = () => {
 
       // login in the  user
       authCtx.login();
+
+      setLoading(false);
 
       // navigate to home page
       setTimeout(() => {
@@ -46,6 +49,7 @@ const Login = () => {
       setErrorMsg(err.response.data.message);
       setShowAlert(true);
       setShowError(true);
+      setLoading(false);
     }
   };
   return (
@@ -88,7 +92,7 @@ const Login = () => {
                 className="btn btn--green"
                 type="primary"
                 htmltype="submit">
-                Login
+                {loading ? "Loging..." : "Login"}
               </button>
             </div>
           </form>

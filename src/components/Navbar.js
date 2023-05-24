@@ -15,14 +15,16 @@ const Navbar = (props) => {
   const authCtx = useContext(AuthContext);
   const user = authCtx.user;
 
+  // get the user image from the server
+
   useEffect(() => {
     const getImg = async () => {
       if (user) {
         const imageUrl = await getUserImgAction(user.photo);
-
         setUserImg(imageUrl);
       }
     };
+
     getImg();
   }, [user]);
 
@@ -52,7 +54,11 @@ const Navbar = (props) => {
                 My bookings
               </a>
               <Link to={`user/${user._id}`} className="nav__el">
-                <img src={userImg} className="nav__user-img" alt="User" />
+                <img
+                  src={userImg ? userImg : defaultUserImg}
+                  className="nav__user-img"
+                  alt="User"
+                />
                 <span>{user ? user.name.split(" ")[0] : ""}</span>
               </Link>
               <button

@@ -20,7 +20,6 @@ const UserAccount = (props) => {
       try {
         setIsPageLoaded(true);
         const { data } = await getUserAction(userId);
-        console.log(data);
 
         authCtx.updateStoreUser(data.user);
 
@@ -33,15 +32,6 @@ const UserAccount = (props) => {
     };
     getUser();
   }, [userId]);
-
-  // const handelUserUpdate = async (updateUserData) => {
-  //   setUser(updateUserData);
-  //   console.log("updated user in userAccount", user);
-  // };
-
-  // useEffect(() => {
-  //   console.log("this is new user", user);
-  // }, [user]);
 
   return (
     <Fragment>

@@ -34,10 +34,10 @@ const UpdatePassword = (props) => {
     };
 
     const token = localStorage.getItem("token");
-    console.log(value);
+
     try {
       const data = await updateUserPassword(token, value);
-      console.log(data);
+
       // show success alert
       setShowAlert(true);
       setShowError(false);

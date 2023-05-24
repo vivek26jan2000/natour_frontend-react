@@ -60,7 +60,6 @@ export const AuthContextProvider = (props) => {
   // updating the user
   const updateUserHadler = async (userData) => {
     setUser(userData);
-    console.log(user);
   };
 
   const ctxObj = {
