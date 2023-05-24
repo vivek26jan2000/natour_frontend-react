@@ -10,7 +10,7 @@ const UpdateUser = (props) => {
   const [inputName, setInputName] = useState(props.user.name);
   const [inputEmail, setInputEmail] = useState(props.user.email);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [selectedFileName, setSelectedFileName] = useState("");
+
   const [previewImage, setPreviewImage] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -41,7 +41,6 @@ const UpdateUser = (props) => {
   const handlePhotoChange = (e) => {
     const selectedFile = e.target.files[0];
     setPhoto(selectedFile);
-    setSelectedFileName(selectedFile.name);
 
     // Display the selected image preview
     const reader = new FileReader();

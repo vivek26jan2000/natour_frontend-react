@@ -36,7 +36,7 @@ const UpdatePassword = (props) => {
     const token = localStorage.getItem("token");
 
     try {
-      const data = await updateUserPassword(token, value);
+     await updateUserPassword(token, value);
 
       // show success alert
       setShowAlert(true);

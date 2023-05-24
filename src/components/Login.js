@@ -29,7 +29,7 @@ const Login = () => {
     const password = inputPassword;
     try {
       setLoading(true);
-      const data = await loginAction(email, password);
+      await loginAction(email, password);
 
       // show success alert
       setShowAlert(true);

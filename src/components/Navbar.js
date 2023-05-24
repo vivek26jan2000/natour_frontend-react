@@ -5,7 +5,7 @@ import logoImg from "../img/logo-white.png";
 import { Link } from "react-router-dom";
 import { Fragment, useContext, useEffect, useState } from "react";
 import AuthContext from "../store/authContext";
-import { getUserAction, getUserImgAction } from "../utils/actions";
+import { getUserImgAction } from "../utils/actions";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = (props) => {
